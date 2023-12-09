@@ -14,10 +14,13 @@
     "lint:style": "stylelint src/**/*.{css,scss,vue} --cache --fix"
   },
   "dependencies": {
+    "@element-plus/icons-vue": "^2.3.1",
+    "element-plus": "^2.4.3",
     "vue": "^3.3.8"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.23.3",
+    "@types/node": "^20.10.4",
     "@typescript-eslint/eslint-plugin": "^6.13.2",
     "@typescript-eslint/parser": "^6.13.2",
     "@vitejs/plugin-vue": "^4.5.0",

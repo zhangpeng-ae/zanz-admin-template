@@ -1,10 +1,11 @@
 import { createApp } from 'vue'
 import './style.css'
 import App from './App.vue'
+import ElementPlus from 'element-plus'
+import 'element-plus/theme-chalk/index.css'
 
-function abstract() {
-  console.log('abstract')
-}
-abstract()
+const app = createApp(App)
 
-createApp(App).mount('#app')
+app.use(ElementPlus)
+
+app.mount('#app')
