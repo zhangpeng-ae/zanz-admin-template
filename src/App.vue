@@ -9,9 +9,11 @@
     <el-button type="warning" :icon="Star" circle></el-button>
     <el-button type="danger" :icon="Delete" circle></el-button>
   </div>
+  <svg-icon name="refresh" spin size="80" />
 </template>
 
 <script lang="ts" setup>
+import SvgIcon from './components/SvgIcon.vue'
 import HelloWorld from '@/components/HelloWorld.vue'
 import {
   Search,

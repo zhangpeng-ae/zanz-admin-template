@@ -24,8 +24,10 @@ pnpm build
 
 ## 使用SvgIcon
 
-- 在`src/assets/icon/`目录下放入svg图标文件
+- 在`src/assets/icons/`目录下放入svg图标文件
 - 在需要使用的地方使用`<svg-icon icon-class="svg文件名" />`即可
+- spin 属性为true时，图标会旋转
+- size 属性为图标大小，默认为 1em
 
 ```javascript
 <template>
