@@ -8,11 +8,19 @@ import type {
 import { ElMessage } from 'element-plus'
 import { localGet } from '../local'
 
+export interface Result {
+  code: number
+  messae: string
+}
+export interface ResultData<T = any> extends Result {
+  data: T
+}
+
 const TOKEN_KEY = '__TOKEN__'
 
 const service: AxiosInstance = axios.create({
-  baseURL: '/api',
-  timeout: 0,
+  baseURL: import.meta.env.VITE_APP_BASE_API as string,
+  timeout: 5000,
 })
 
 /* 请求拦截器 */
@@ -20,7 +28,7 @@ service.interceptors.request.use(
   (config) => {
     const token = localGet(TOKEN_KEY)
     if (token) {
-      config.headers.Authorization = `${token}`
+      config.headers.Authorization = token
     }
     return config
   },
@@ -36,7 +44,7 @@ service.interceptors.response.use(
     const { code, message, data } = response.data
 
     // 根据自定义错误码判断请求是否成功
-    if (code === 0) {
+    if (code === 200) {
       // 将组件用的数据返回
       return data
     } else {
@@ -75,28 +83,36 @@ service.interceptors.response.use(
 
 /* 导出封装的请求方法 */
 const http = {
-  get<T = any>(url: string, config?: AxiosRequestConfig): Promise<T> {
-    return service.get(url, config)
+  get<T>(
+    url: string,
+    params?: object,
+    config?: AxiosRequestConfig,
+  ): Promise<ResultData<T>> {
+    return service.get(url, { params, ...config })
   },
 
-  post<T = any>(
+  post<T>(
     url: string,
     data?: object,
     config?: AxiosRequestConfig,
-  ): Promise<T> {
+  ): Promise<ResultData<T>> {
     return service.post(url, data, config)
   },
 
-  put<T = any>(
+  put<T>(
     url: string,
     data?: object,
     config?: AxiosRequestConfig,
-  ): Promise<T> {
+  ): Promise<ResultData<T>> {
     return service.put(url, data, config)
   },
 
-  delete<T = any>(url: string, config?: AxiosRequestConfig): Promise<T> {
-    return service.delete(url, config)
+  delete<T>(
+    url: string,
+    data?: object,
+    config?: AxiosRequestConfig,
+  ): Promise<ResultData<T>> {
+    return service.delete(url, { data, ...config })
   },
 }
 
