@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { RESEETSTORE } from '@/utils/reset'
-// import { getUserInfo, login } from '@/api'
+import { getUserInfo, login } from '@/api'
 
 export const useUserStore = defineStore('user', {
   state: () => ({
@@ -14,6 +14,14 @@ export const useUserStore = defineStore('user', {
     },
     setUserInfo(userInfo: any) {
       this.userInfo = userInfo
+    },
+    async GetInfoAction() {
+      const result = await getUserInfo()
+      console.log(
+        '%c [ result ]-20',
+        'font-size:13px; background:pink; color:#bf2c9f;',
+        result,
+      )
     },
     resetUser() {
       RESEETSTORE()

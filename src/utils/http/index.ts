@@ -16,7 +16,7 @@ export interface ResultData<T = any> extends Result {
   data: T
 }
 
-const TOKEN_KEY = '__TOKEN__'
+const TOKEN_KEY = 'token'
 
 const service: AxiosInstance = axios.create({
   baseURL: import.meta.env.VITE_APP_BASE_API as string,
