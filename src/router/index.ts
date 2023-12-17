@@ -1,5 +1,4 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'
-// import { useUserStore } from '@/store/modules/user'
 
 export const constantRoutes: Array<RouteRecordRaw> = [
   {
@@ -55,35 +54,5 @@ const router = createRouter({
   // 刷新时，滚动条位置还原
   scrollBehavior: () => ({ left: 0, top: 0 }),
 })
-
-// const LOGIN_URL = '/login'
-
-// router.beforeEach((to, from, next) => {
-//   const userStore = useUserStore()
-
-//   if (to.path === LOGIN_URL) {
-//     if (userStore.token) return next({ path: '/' })
-//     return next()
-//   }
-
-//   // 判断是否需要登录才能访问
-//   if (to.meta.requireAuth) {
-//     // 判断是否登录
-//     if (userStore.token) {
-//       next()
-//     } else {
-//       next({
-//         path: LOGIN_URL,
-//         query: {
-//           redirect: to.fullPath,
-//         },
-//       })
-//     }
-//   } else {
-//     next()
-//   }
-
-//   next()
-// })
 
 export default router

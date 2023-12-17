@@ -83,35 +83,35 @@ service.interceptors.response.use(
 
 /* 导出封装的请求方法 */
 const http = {
-  get<T>(
+  get<T = any>(
     url: string,
     params?: object,
     config?: AxiosRequestConfig,
-  ): Promise<ResultData<T>> {
+  ): Promise<T> {
     return service.get(url, { params, ...config })
   },
 
-  post<T>(
+  post<T = any>(
     url: string,
     data?: object,
     config?: AxiosRequestConfig,
-  ): Promise<ResultData<T>> {
+  ): Promise<T> {
     return service.post(url, data, config)
   },
 
-  put<T>(
+  put<T = any>(
     url: string,
     data?: object,
     config?: AxiosRequestConfig,
-  ): Promise<ResultData<T>> {
+  ): Promise<T> {
     return service.put(url, data, config)
   },
 
-  delete<T>(
+  delete<T = any>(
     url: string,
     data?: object,
     config?: AxiosRequestConfig,
-  ): Promise<ResultData<T>> {
+  ): Promise<T> {
     return service.delete(url, { data, ...config })
   },
 }
