@@ -1,45 +1,91 @@
 <template>
-  <div class="login-container">
-    <div class="login-form shadow-2xl bg-white rounded-lg p-4">
-      <div class="admin-title">zanz-admin</div>
-      <el-form ref="formRef" :model="loginForm" :rules="loginRules">
-        <el-form-item prop="username">
-          <span class="title">用户名</span>
-          <el-input
-            v-model="loginForm.username"
-            name="username"
-            type="text"
-            placeholder="请输入用户名"
-          ></el-input>
-        </el-form-item>
-        <el-form-item prop="password">
-          <span class="title">密码</span>
-          <el-input
-            v-model="loginForm.password"
-            name="password"
-            type="password"
-            placeholder="请输入密码"
-          ></el-input>
-        </el-form-item>
-        <el-button type="primary" @click="handleLogin" class="w-full">
-          登录
-        </el-button>
-      </el-form>
+  <div class="view-account">
+    <div class="view-account-header"></div>
+    <div class="view-account-container">
+      <div class="view-account-top">
+        <div class="view-account-top-logo">
+          <img :src="loginImage" alt="" />
+        </div>
+        <div class="view-account-top-desc">Zanz-admin后台管理系统</div>
+      </div>
+      <div class="view-account-form">
+        <el-form
+          ref="formRef"
+          label-position="left"
+          size="large"
+          :model="loginForm"
+          :rules="loginRules"
+        >
+          <el-form-item prop="username">
+            <el-input v-model="loginForm.username" type="text">
+              <template #prefix>
+                <el-icon size="18" color="#808695"><User /></el-icon>
+              </template>
+            </el-input>
+          </el-form-item>
+          <el-form-item prop="password">
+            <el-input v-model="loginForm.password" :type="passwordType">
+              <template #prefix>
+                <el-icon size="18" color="#808695"><Lock /></el-icon>
+              </template>
+              <template #suffix>
+                <el-icon
+                  size="18"
+                  color="#808695"
+                  class="eyes cursor-pointer"
+                  @click="switchVisible"
+                >
+                  <Hide v-if="isVisible" />
+                  <View v-else />
+                </el-icon>
+              </template>
+            </el-input>
+          </el-form-item>
+
+          <el-form-item class="default-color">
+            <div class="flex justify-between">
+              <div class="mr-2">
+                <el-checkbox v-model:checked="autoLogin">自动登录</el-checkbox>
+              </div>
+              <div>
+                <a href="javascript:">忘记密码</a>
+              </div>
+            </div>
+          </el-form-item>
+          <el-form-item>
+            <el-button
+              size="large"
+              block
+              type="primary"
+              class="w-full"
+              @click="handleLogin"
+              :loading="butLoading"
+            >
+              登录
+            </el-button>
+          </el-form-item>
+        </el-form>
+      </div>
     </div>
   </div>
 </template>
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { login } from '@/api/user'
 import { FormInstance, ElMessage } from 'element-plus'
 import { validatePassword } from './index'
 import { useUserStore } from '@/store'
 import { useRouter } from 'vue-router'
+import loginImage from '@/assets/images/account-logo.png'
 
 const store = useUserStore()
 const router = useRouter()
 
 const formRef = ref<FormInstance | null>(null)
+
+const passwordType = computed(() => {
+  return isVisible.value ? 'text' : 'password'
+})
 
 const loginForm = ref({
   username: 'admin',
@@ -53,46 +99,87 @@ const loginRules = ref({
   ],
 })
 
-const handleLogin = async () => {
+const isVisible = ref(false)
+
+const switchVisible = () => {
+  isVisible.value = !isVisible.value
+}
+
+const autoLogin = ref(true)
+
+const butLoading = ref(false)
+
+const handleLogin = async (e) => {
+  e.preventDefault()
+
   formRef.value?.validate(async (valid) => {
     if (!valid) return
-    const data = await login(loginForm.value)
-    if (data) {
-      const { token, userInfo } = data
-      store.setToken(token)
-      store.setUserInfo(userInfo)
-      ElMessage.success('登录成功')
+    butLoading.value = true
+    setTimeout(() => {
+      butLoading.value = false
+      ElMessage.success('登录成功，即将进入系统')
+    }, 3000)
+    // const data = await login(loginForm.value)
+    // if (data) {
+    //   const { token, userInfo } = data
+    //   store.setToken(token)
+    //   store.setUserInfo(userInfo)
+    //   ElMessage.success('登录成功')
 
-      setTimeout(() => {
-        router.push('/')
-      }, 1000)
-    }
+    //   setTimeout(() => {
+    //     router.push('/')
+    //   }, 1000)
+    // }
   })
 }
 </script>
 <style lang="scss" scoped>
-.login-container {
-  position: relative;
-  width: 100vw;
+.view-account {
+  display: flex;
+  flex-direction: column;
   height: 100vh;
-  overflow: hidden;
-  background: url('@/assets/images/login.png') no-repeat center;
-  background-size: cover;
-}
-.login-form {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 500px;
-  min-height: 400px;
-}
+  overflow: auto;
 
-.admin-title {
-  width: 100%;
-  text-align: center;
-  line-height: 40px;
-  font-size: 30px;
-  font-weight: bold;
+  &-container {
+    flex: 1;
+    padding: 32px 12px;
+    max-width: 384px;
+    min-width: 320px;
+    margin: 0 auto;
+  }
+
+  &-top {
+    padding: 32px 0;
+    text-align: center;
+
+    &-desc {
+      font-size: 14px;
+      color: #808695;
+    }
+  }
+
+  &-other {
+    width: 100%;
+  }
+
+  .default-color {
+    color: #515a6e;
+
+    .ant-checkbox-wrapper {
+      color: #515a6e;
+    }
+  }
+}
+@media (min-width: 768px) {
+  .view-account {
+    background-image: url('@/assets/images/login.svg');
+    background-repeat: no-repeat;
+    background-position: 50%;
+    background-size: 100%;
+  }
+
+  .page-account-container {
+    padding: 32px 0 24px 0;
+  }
 }
 </style>
