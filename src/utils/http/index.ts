@@ -6,7 +6,8 @@ import type {
   AxiosResponse,
 } from 'axios'
 import { ElMessage } from 'element-plus'
-import { localGet } from '../local'
+import { ResultEnum } from '@/enums/httpEnum'
+import { useUserStore } from '@/store/modules/user'
 
 export interface Result {
   code: number
@@ -16,8 +17,6 @@ export interface ResultData<T = any> extends Result {
   data: T
 }
 
-const TOKEN_KEY = 'token'
-
 const service: AxiosInstance = axios.create({
   baseURL: import.meta.env.VITE_APP_BASE_API as string,
   timeout: 5000,
@@ -26,7 +25,8 @@ const service: AxiosInstance = axios.create({
 /* 请求拦截器 */
 service.interceptors.request.use(
   (config) => {
-    const token = localGet(TOKEN_KEY)
+    const userStore = useUserStore()
+    const token = userStore.getToken
     if (token) {
       config.headers.Authorization = token
     }
@@ -44,7 +44,7 @@ service.interceptors.response.use(
     const { code, message, data } = response.data
 
     // 根据自定义错误码判断请求是否成功
-    if (code === 200) {
+    if (code === ResultEnum.SUCCESS) {
       // 将组件用的数据返回
       return data
     } else {

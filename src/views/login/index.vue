@@ -71,15 +71,16 @@
 </template>
 <script lang="ts" setup>
 import { computed, ref } from 'vue'
-import { login } from '@/api/user'
+import { useRoute, useRouter } from 'vue-router'
+import { useUserStore } from '@/store/modules/user'
 import { FormInstance, ElMessage } from 'element-plus'
 import { validatePassword } from './index'
-import { useUserStore } from '@/store'
-import { useRouter } from 'vue-router'
 import loginImage from '@/assets/images/account-logo.png'
 
-const store = useUserStore()
+const route = useRoute()
 const router = useRouter()
+
+const userStore = useUserStore()
 
 const formRef = ref<FormInstance | null>(null)
 
@@ -112,24 +113,33 @@ const butLoading = ref(false)
 const handleLogin = async (e) => {
   e.preventDefault()
 
-  formRef.value?.validate(async (valid) => {
-    if (!valid) return
-    butLoading.value = true
-    setTimeout(() => {
-      butLoading.value = false
-      ElMessage.success('登录成功，即将进入系统')
-    }, 3000)
-    // const data = await login(loginForm.value)
-    // if (data) {
-    //   const { token, userInfo } = data
-    //   store.setToken(token)
-    //   store.setUserInfo(userInfo)
-    //   ElMessage.success('登录成功')
+  formRef.value?.validate(async (errors) => {
+    if (errors) {
+      butLoading.value = true
 
-    //   setTimeout(() => {
-    //     router.push('/')
-    //   }, 1000)
-    // }
+      const { username, password } = loginForm.value
+      const params = {
+        username,
+        password,
+      }
+
+      try {
+        await userStore.login(params)
+        ElMessage.success('登录成功，即将进入系统')
+
+        const toPath = decodeURIComponent(
+          (route.query?.redirect || '/') as string,
+        )
+        ElMessage.success('登录成功，即将进入系统')
+        if (route.name === '/login') {
+          router.replace('/')
+        } else router.replace(toPath)
+      } finally {
+        butLoading.value = false
+      }
+    } else {
+      ElMessage.error('请填写完整信息，并且进行验证码校验')
+    }
   })
 }
 </script>

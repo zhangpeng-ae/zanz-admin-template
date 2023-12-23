@@ -1,10 +1,10 @@
 <template>
-  layout
-  <router-view></router-view>
+  <div>DashboardConsole</div>
 </template>
+
 <script setup lang="ts">
 defineOptions({
-  name: 'Layout',
+  name: 'DashboardConsole',
 })
 </script>
 
