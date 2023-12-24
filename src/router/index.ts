@@ -56,14 +56,14 @@ const router = createRouter({
   scrollBehavior: () => ({ left: 0, top: 0 }),
 })
 
-router.beforeEach((to, from, next) => {
-  const token = storage.get(ACCESS_TOKEN)
-  if (to.path === '/login' && token) {
-    next('/dashboard')
-    return
-  }
-  next()
-})
+// router.beforeEach((to, from, next) => {
+//   const token = storage.get(ACCESS_TOKEN)
+//   if (to.path === '/login' && token) {
+//     next('/dashboard')
+//     return
+//   }
+//   next()
+// })
 
 router.afterEach((to) => {
   document.title = (to?.meta?.title as string) || document.title

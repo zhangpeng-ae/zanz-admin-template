@@ -1,0 +1,33 @@
+.el-menu {
+  height: 100%;
+  background-color: transparent;
+  border: none;
+}
+.el-menu-item,
+.el-sub-menu__title {
+  height: 42px;
+  color: #a5acb3;
+  background-color: transparent !important;
+
+  &:hover {
+    color: #fff;
+  }
+
+  div,
+  span {
+    height: 42px;
+    line-height: 42px;
+  }
+}
+
+.is-active .el-sub-menu__title {
+  color: #fff !important;
+}
+.el-menu-item.is-active {
+  color: #fff !important;
+  background-color: var(--el-color-primary) !important;
+}
+
+.el-menu--popup {
+  background-color: #001428;
+}

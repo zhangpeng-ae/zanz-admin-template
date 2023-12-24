@@ -5,11 +5,12 @@ import Pinia from '@/store'
 import RegisterGlobComp from '@/components'
 import ElementPlus from 'element-plus'
 
+import 'element-plus/theme-chalk/index.css'
+
 import 'virtual:svg-icons-register'
-import '@/styles/index.scss'
 import '@/styles/reset.scss'
 import '@/styles/tailwind.css'
-import 'element-plus/theme-chalk/index.css'
+import '@/styles/index.scss'
 
 const app = createApp(App)
 

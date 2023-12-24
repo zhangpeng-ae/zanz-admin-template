@@ -125,8 +125,6 @@ const handleLogin = async (e) => {
 
       try {
         await userStore.login(params)
-        ElMessage.success('登录成功，即将进入系统')
-
         const toPath = decodeURIComponent(
           (route.query?.redirect || '/') as string,
         )
