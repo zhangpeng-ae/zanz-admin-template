@@ -125,13 +125,15 @@ const handleLogin = async (e) => {
 
       try {
         await userStore.login(params)
+        ElMessage.success('登录成功，即将进入系统')
         const toPath = decodeURIComponent(
           (route.query?.redirect || '/') as string,
         )
-        ElMessage.success('登录成功，即将进入系统')
-        if (route.name === '/login') {
-          router.replace('/')
-        } else router.replace(toPath)
+        setTimeout(() => {
+          if (route.name === '/login') {
+            router.replace('/')
+          } else router.replace(toPath)
+        }, 1000)
       } finally {
         butLoading.value = false
       }

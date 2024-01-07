@@ -11,7 +11,7 @@ import { useUserStore } from '@/store/modules/user'
 
 export interface Result {
   code: number
-  messae: string
+  message: string
 }
 export interface ResultData<T = any> extends Result {
   data: T
