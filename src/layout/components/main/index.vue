@@ -1,11 +1,11 @@
 <script setup lang="ts">
 defineOptions({
-  name: '',
+  name: 'PageMain',
 })
 </script>
 
 <template>
-  <div>test</div>
+  <router-view></router-view>
 </template>
 
 <style lang="scss" scoped></style>

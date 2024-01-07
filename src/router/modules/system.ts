@@ -12,6 +12,7 @@ const routes: Array<RouteRecordRaw> = [
     meta: {
       title: 'System',
       icon: 'el-icon-s-home',
+      permissions: ['system_menu', 'system_role'],
       sort: 1,
     },
     children: [
@@ -22,6 +23,7 @@ const routes: Array<RouteRecordRaw> = [
         meta: {
           title: '菜单权限管理',
           icon: 'el-icon-s-home',
+          permissions: ['system_menu'],
         },
       },
       {
@@ -31,6 +33,7 @@ const routes: Array<RouteRecordRaw> = [
         meta: {
           title: '角色权限管理',
           icon: 'el-icon-s-home',
+          permissions: ['system_role'],
         },
       },
     ],

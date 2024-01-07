@@ -8,10 +8,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/dashboard',
     name: routeName,
     component: Layout,
-    redirect: '/dashboard/console',
+    redirect: '/dashboard/console', // 默认路由
     meta: {
       title: 'Dashboard',
       icon: 'el-icon-s-home',
+      permissions: ['dashboard_console', 'dashboard_workplace'],
       sort: 0,
     },
     children: [
@@ -22,6 +23,17 @@ const routes: Array<RouteRecordRaw> = [
         meta: {
           title: '主控台',
           icon: 'el-icon-s-home',
+          permissions: ['dashboard_console'],
+        },
+      },
+      {
+        path: 'workplace',
+        name: `${routeName}_workplace`,
+        component: () => import('@/views/dashboard/workplace/workplace.vue'),
+        meta: {
+          title: '工作台',
+          icon: 'el-icon-s-home',
+          permissions: ['dashboard_workplace'],
         },
       },
     ],

@@ -1,16 +1,14 @@
-import '@/styles/tailwind.css'
 import { createApp } from 'vue'
 import App from './App.vue'
 import Router from '@/router'
 import Pinia from '@/store'
-import RegisterGlobComp from '@/components'
-
-// ElementPlus
 import ElementPlus from 'element-plus'
-import 'element-plus/theme-chalk/index.css'
+import RegisterGlobComp from '@/components'
 
 import '@/styles/reset.scss'
 import '@/styles/index.scss'
+import '@/styles/tailwind.css'
+import 'element-plus/dist/index.css'
 
 const app = createApp(App)
 
@@ -20,8 +18,8 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
   app.component(key, component)
 }
 
-app.use(Router)
 app.use(Pinia)
+app.use(Router)
 app.use(RegisterGlobComp)
 app.use(ElementPlus)
 
