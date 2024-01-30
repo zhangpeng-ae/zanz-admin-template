@@ -22,6 +22,7 @@ interface LoginResultData {
   userInfo: UserInfoType
 }
 
+// 当权角色菜单权限
 const permissions = [
   {
     label: '主控台',
@@ -41,6 +42,9 @@ const permissions = [
   },
 ]
 
+/**
+ * 登录
+ */
 export function login(
   data: LoginParams,
 ): Promise<ResultData<LoginResultData | null>> {
@@ -73,6 +77,9 @@ export function login(
   })
 }
 
+/**
+ * 获取用户信息
+ */
 export function getUserInfoApi(): Promise<ResultData<UserInfoType | null>> {
   return new Promise((resolve) => {
     setTimeout(() => {

@@ -10,7 +10,7 @@ const routes: Array<RouteRecordRaw> = [
     component: Layout,
     redirect: '/system/menu',
     meta: {
-      title: 'System',
+      title: '系统设置',
       icon: 'el-icon-s-home',
       permissions: ['system_menu', 'system_role'],
       sort: 1,

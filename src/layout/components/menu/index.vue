@@ -1,25 +1,32 @@
 <template>
-  <el-menu class="layout-aside-menu" default-active="1-1" :collapse="collapsed">
-    <el-sub-menu index="1">
+  <el-menu
+    class="layout-aside-menu"
+    :default-active="defaultActive"
+    :collapse="collapsed"
+  >
+    <el-sub-menu :index="item.name" v-for="item in menuList" :key="item.name">
       <template #title>
         <el-icon><Odometer /></el-icon>
-        <span>Dashboard</span>
+        <span>{{ item.meta.title }}</span>
       </template>
-      <el-menu-item index="1-1">主控台</el-menu-item>
-      <el-menu-item index="1-2">工作台</el-menu-item>
-    </el-sub-menu>
-    <el-sub-menu index="2">
-      <template #title>
-        <el-icon><Operation /></el-icon>
-        <span>系统设置</span>
+      <template v-if="item.children.length">
+        <el-menu-item
+          :index="child.name"
+          v-for="child in item.children"
+          :key="child.name"
+          @click="toRouter(child.name)"
+        >
+          {{ child.meta.title }}
+        </el-menu-item>
       </template>
-      <el-menu-item index="2-1">菜单权限管理</el-menu-item>
-      <el-menu-item index="2-2">角色权限管理</el-menu-item>
     </el-sub-menu>
   </el-menu>
 </template>
 <script setup lang="ts">
-import { withDefaults } from 'vue'
+import { ref, withDefaults } from 'vue'
+import { useRouter } from 'vue-router'
+import { useAsyncRouteStore } from '@/store/modules/asyncRoute'
+
 defineOptions({
   name: 'PageMenu',
 })
@@ -31,6 +38,28 @@ interface Props {
 withDefaults(defineProps<Props>(), {
   collapsed: false,
 })
+
+const asyncRouteStore = useAsyncRouteStore()
+const menuList: any[] = asyncRouteStore.getMenus
+console.log(
+  '%c [ menuList ]-44',
+  'font-size:13px; background:pink; color:#bf2c9f;',
+  menuList,
+)
+
+const defaultActive = ref('')
+if (menuList.length) {
+  defaultActive.value = menuList[0].children
+    ? menuList[0].children[0].name
+    : menuList[0].name
+}
+
+const router = useRouter()
+const toRouter = (name: string) => {
+  router.push({
+    name,
+  })
+}
 </script>
 
 <style lang="scss">

@@ -1,5 +1,5 @@
 <template>
-  <div>test</div>
+  <div>workplace</div>
 </template>
 <script setup lang="ts">
 defineOptions({

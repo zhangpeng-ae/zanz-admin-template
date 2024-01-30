@@ -5,7 +5,7 @@ defineOptions({
 </script>
 
 <template>
-  <div>test</div>
+  <div>menu</div>
 </template>
 
 <style lang="scss" scoped></style>

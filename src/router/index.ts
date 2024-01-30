@@ -1,14 +1,17 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'
-import { useUserStore } from '@/store/modules/user'
-import { useAsyncRouteStore } from '@/store/modules/asyncRoute'
 import { ACCESS_TOKEN } from '@/store/mutation-types'
 import { storage } from '@/utils/Storage'
 import { PageEnum } from '@/enums/pageEnum'
 import type { IModuleType } from './types'
+import { useAsyncRouteStore } from '@/store/modules/asyncRoute'
+import remainingRouter from './modules/remaining'
 
-const modules = import.meta.glob<IModuleType>('./modules/**/*.ts', {
-  eager: true,
-})
+const modules = import.meta.glob<IModuleType>(
+  ['./modules/**/*.ts', '!./modules/**/remaining.ts'],
+  {
+    eager: true,
+  },
+)
 
 // 通过 glob 动态导入路由模块
 const routeModuleList: RouteRecordRaw[] = Object.keys(modules).reduce(
@@ -27,32 +30,14 @@ function sortRoute(a, b) {
 
 routeModuleList.sort(sortRoute)
 
-const RootRoute: RouteRecordRaw = {
-  path: '/',
-  name: 'Root',
-  redirect: '/dashboard',
-  meta: {
-    title: 'Root',
-  },
-}
-
-const LoginRoute: RouteRecordRaw = {
-  path: '/login',
-  name: 'Login',
-  component: () => import('@/views/login/index.vue'),
-  meta: {
-    title: '登录',
-  },
-}
-
 export const asyncRoutes = [...routeModuleList]
 
-export const constantRouter: RouteRecordRaw[] = [LoginRoute, RootRoute]
+export const constantRouter: RouteRecordRaw[] = remainingRouter
 
 // 创建路由实例
 const router = createRouter({
   history: createWebHashHistory(),
-  routes: constantRouter,
+  routes: constantRouter.concat(asyncRoutes),
   // 刷新时，滚动条位置还原
   scrollBehavior: () => ({ left: 0, top: 0 }),
 })
@@ -66,6 +51,7 @@ router.beforeEach(async (to, from, next) => {
     next()
     return
   }
+
   const token = storage.get(ACCESS_TOKEN)
   if (!token) {
     if (to.meta.ignoreAuth) {
@@ -91,16 +77,13 @@ router.beforeEach(async (to, from, next) => {
     return
   }
 
-  const userStore = useUserStore()
   const asyncRouteStore = useAsyncRouteStore()
-  const userInfo = await userStore.getInfo()
-  const routes = asyncRouteStore.generateRoutes(userInfo)
-  console.log(
-    '%c [ routes ]-98',
-    'font-size:13px; background:pink; color:#bf2c9f;',
-    routes,
-  )
 
+  if (asyncRouteStore.getIsDynamicRouteAdded) {
+    next()
+    return
+  }
+  asyncRouteStore.setRouters(asyncRoutes)
   next()
 })
 
